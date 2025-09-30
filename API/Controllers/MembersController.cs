@@ -1,10 +1,12 @@
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class MembersController(AppDbContext context) : BaseApiController
     {
         [HttpGet] // http://localhost:5016/api/members
@@ -17,6 +19,7 @@ namespace API.Controllers
             //return context.Users.ToList();
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")] // http://localhost:5016/api/members/3
         public async Task<ActionResult<AppUser>> GetMember(string id)
         {
@@ -30,3 +33,7 @@ namespace API.Controllers
         }
     }
 }
+
+
+// microsoft.aspnetcore.authentication.jwtbearer -*
+// microsoft.aspnetcore.mvc

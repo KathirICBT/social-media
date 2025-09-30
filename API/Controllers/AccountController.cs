@@ -4,6 +4,7 @@ using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,14 +29,16 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
     context.Users.Add(user);
     await context.SaveChangesAsync();
 
-    return new UserDto
-    {
-      Id = user.Id,
-      Email = user.Email,
-      DisplayName = user.DisplayName,
-      // ImageUrl = null, 
-      Token = tokenService.CreateToken(user) // create a token for the user
-    };
+    // return new UserDto
+    // {
+    //   Id = user.Id,
+    //   Email = user.Email,
+    //   DisplayName = user.DisplayName,
+    //   // ImageUrl = null, 
+    //   Token = tokenService.CreateToken(user) // create a token for the user
+    // };
+
+    return user.ToDto(tokenService);
   }
 
   [HttpPost("login")] // http://localhost:5016/api/account/login
@@ -54,14 +57,17 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
       if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
     }
 
-    return new UserDto
-    {
-      Id = user.Id,
-      Email = user.Email,
-      DisplayName = user.DisplayName,
-      // ImageUrl = null, 
-      Token = tokenService.CreateToken(user) // create a token for the user
-    };
+    // return new UserDto
+    // {
+    //   Id = user.Id,
+    //   Email = user.Email,
+    //   DisplayName = user.DisplayName,
+    //   // ImageUrl = null, 
+    //   Token = tokenService.CreateToken(user) // create a token for the user
+    // };   
+
+    return user.ToDto(tokenService); // return the user as a DTO with a token
+    // return AppUserExtensions.ToDto(user, tokenService); // return the user as a DTO with a token
   }
 
   // dotnet ef database drop
