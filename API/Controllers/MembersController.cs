@@ -9,6 +9,7 @@ namespace API.Controllers
     [Authorize]
     public class MembersController(AppDbContext context) : BaseApiController
     {
+        [AllowAnonymous]
         [HttpGet] // http://localhost:5016/api/members
         public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
         {
@@ -19,7 +20,7 @@ namespace API.Controllers
             //return context.Users.ToList();
         }
 
-        [AllowAnonymous]
+
         [HttpGet("{id}")] // http://localhost:5016/api/members/3
         public async Task<ActionResult<AppUser>> GetMember(string id)
         {
