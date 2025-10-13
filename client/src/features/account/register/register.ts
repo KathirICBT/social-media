@@ -31,3 +31,8 @@ export class Register {
     this.cancelRegister.emit(false);
   }
 }
+
+// ng g c features/members/member-list --dry-run
+// ng g c features/members/member-detailed
+// ng g c features/lists
+// ng g c features/messages

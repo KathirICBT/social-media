@@ -13,6 +13,7 @@ export class Home {
   protected registerMode = signal(false);
 
   showRegister(value: boolean) {
+    // this.registerMode.set(true);
     this.registerMode.set(value);
   }
 }

@@ -2,25 +2,28 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { Nav } from '../layout/nav/nav';
-import { AccountService } from '../core/services/account-service';
-import { Home } from "../features/home/home";
+// import { AccountService } from '../core/services/account-service';
 import { User } from '../types/user';
+import { Router, RouterOutlet } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [Nav, Home],
+  imports: [Nav, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App {
+  // export class App implements OnInit {
   // 02.10.2025 - 02
-  private accountService = inject(AccountService);
-  private http = inject(HttpClient);
-  protected readonly title = signal('Social Media App');
+  // private accountService = inject(AccountService);
+  protected router = inject(Router); // inject Router service
+  // private http = inject(HttpClient);
+  // protected readonly title = signal('Social Media App');
   // protected members: any;
   // protected members = signal<any>([]);
   //03.10.2025 - 01
-  protected members = signal<User[]>([]);
+  // protected members = signal<User[]>([]);
 
   // constructor(private http: HttpClient) {} // Alternative way to inject HttpClient
 
@@ -77,28 +80,28 @@ export class App implements OnInit {
 
   // =========================================================================================================================
 
-  async ngOnInit() {
-    this.members.set(await this.getMembers());
-    this.setCurrentUser();
-  }
+  // async ngOnInit() {
+  //   this.members.set(await this.getMembers());
+  //   // this.setCurrentUser();
+  // }
 
-  setCurrentUser() {
-    const userString = localStorage.getItem('user');
-    if (!userString) return;
-    const user = JSON.parse(userString);
-    this.accountService.currentUser.set(user);
-  }
+  // setCurrentUser() {
+  //   const userString = localStorage.getItem('user');
+  //   if (!userString) return;
+  //   const user = JSON.parse(userString);
+  //   this.accountService.currentUser.set(user);
+  // }
 
-  async getMembers() {
-    try {
-      // const response = await lastValueFrom( this.http.get('http://localhost:5016/api/members'));
-      // this.members.set(response);
-      return lastValueFrom(this.http.get<User[]>('http://localhost:5016/api/members'));
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
+  // async getMembers() {
+  //   try {
+  //     // const response = await lastValueFrom( this.http.get('http://localhost:5016/api/members'));
+  //     // this.members.set(response);
+  //     return lastValueFrom(this.http.get<User[]>('http://localhost:5016/api/members'));
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw error;
+  //   }
+  // }
 }
 
 // need to configer path (./src/layout/nav/nav.ts) in angular.json
