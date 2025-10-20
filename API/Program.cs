@@ -1,6 +1,7 @@
 using System.Text;
 using API.Data;
 using API.Interfaces;
+using API.Middleware;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>(); // Register the TokenService with the dependency injection container as a scoped service so that it can be injected into controllers and other services as needed.
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 // Scoped lifetime is appropriate for services that need to maintain state within a single request but should not persist beyond that request. This is the default lifetime for services in ASP.NET Core. It means that a new instance of the service will be created for each request.
 
 // JWT Authentication and Authorization Setup 
@@ -49,6 +51,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // Ad
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>(); // Add the custom exception handling middleware to the request pipeline. This middleware will catch any unhandled exceptions that occur during the processing of a request and return a standardized error response to the client.
 app.UseCors(policy =>
     policy.AllowAnyHeader()
           .AllowAnyMethod()
@@ -67,5 +70,23 @@ app.UseAuthorization(); // Add the authorization middleware to the request pipel
 // app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync(); // Apply any pending migrations to the database. This will ensure that the database schema is up-to-date with the latest changes in the application code.
+    await Seed.SeedUsers(context); // Seed the database with initial user data. This will create some default users in the database that can be used for testing and development purposes.
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred during migration");
+}
+
+// dotnet ef database drop
+
 
 app.Run();
