@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { LoginCreds, RegisterCreds, User } from '../../types/user';
 import { tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,8 @@ export class AccountService {
   private http = inject(HttpClient);
   currentUser = signal<User | null>(null); // signal to hold the current user state, Union type User or null
 
-  baseUrl = 'http://localhost:5016/api/';
+  // baseUrl = 'http://localhost:5016/api/';
+  private baseUrl = environment.apiUrl;
 
   // REGISTER METHOD
   register(creds: RegisterCreds) {
@@ -42,6 +44,7 @@ export class AccountService {
 
   logout() {
     localStorage.removeItem('user'); // remove user from local storage
+    localStorage.removeItem('filters'); // remove token from local storage
     this.currentUser.set(null);
   }
 }

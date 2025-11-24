@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
@@ -30,7 +31,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>(); // Register the TokenService with the dependency injection container as a scoped service so that it can be injected into controllers and other services as needed.
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<LogUserActivity>(); // Register the LogUserActivity middleware with the dependency injection container as a scoped service so that it can be injected into controllers and other services as needed.
+//builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings")); // Configure the CloudinarySettings class to bind to the "CloudinarySettings" section of the appsettings.json file. This allows the application to easily access Cloudinary configuration settings such as CloudName, ApiKey, and ApiSecret from the configuration file.
+builder.Services.Configure<CloudinarySettings>(builder.Configuration
+    .GetSection("CloudinarySettings")); // Configure the CloudinarySettings class to bind to the "CloudinarySettings" section of the appsettings.json file. This allows the application to easily access Cloudinary configuration settings such as CloudName, ApiKey, and ApiSecret from the configuration file. // 12/11/2025
 // Scoped lifetime is appropriate for services that need to maintain state within a single request but should not persist beyond that request. This is the default lifetime for services in ASP.NET Core. It means that a new instance of the service will be created for each request.
 
 // JWT Authentication and Authorization Setup 

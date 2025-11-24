@@ -8,6 +8,11 @@ import { authGuard } from '../core/guards/auth-guard';
 import { TestErrors } from '../features/test-errors/test-errors';
 import { NotFound } from '../shared/errors/not-found/not-found';
 import { ServerError } from '../shared/errors/server-error/server-error';
+import { MemberProfile } from '../features/members/member-profile/member-profile';
+import { MemberPhotos } from '../features/members/member-photos/member-photos';
+import { MemberMessages } from '../features/members/member-messages/member-messages';
+import { memberResolver } from '../features/members/member-resolver';
+import { preventUnsavedChangesGuard } from '../core/guards/prevent-unsaved-changes-guard';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -18,7 +23,23 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'members', component: MemberList },
-      { path: 'members/:id', component: MemberDetailed },
+      {
+        path: 'members/:id',
+        resolve: { member: memberResolver }, // <-- added resolver here to get member data before loading component and passing it to the component via ActivatedRoute
+        runGuardsAndResolvers: 'always', // <-- ensure resolvers run on every navigation to this route even if params don't change (needed for resolver to run on initial load) , otherwise resolver will only run when params change. This is needed because we are using the resolver to get the member data before loading the component, and we want to ensure that the resolver runs every time the component is loaded, even if the member id doesn't change.
+        component: MemberDetailed,
+        children: [
+          { path: '', redirectTo: 'profile', pathMatch: 'full' },
+          {
+            path: 'profile',
+            component: MemberProfile,
+            title: 'Profile',
+            canDeactivate: [preventUnsavedChangesGuard],
+          },
+          { path: 'photos', component: MemberPhotos, title: 'Photos' },
+          { path: 'messages', component: MemberMessages, title: 'Messages' },
+        ],
+      },
       { path: 'lists', component: Lists },
       { path: 'messages', component: Messages },
     ],

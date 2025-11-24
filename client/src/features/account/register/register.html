@@ -1,33 +1,215 @@
-<div class="card bg-base-100 w-1/2 mx-auto flex flex-col p-6 rounded-lg shadow-lg">
+<!-- <div class="card bg-base-100 w-1/2 mx-auto flex flex-col p-6 rounded-lg shadow-lg mt-30">
   <div class="card-title justify-center text-3xl text-primary">Sign up</div>
   <div class="card-body w-full">
-    <form #registerForm="ngForm" class="flex flex-col gap-4 w-full" (ngSubmit)="register()">
-      <input class="input w-full" name="email" [(ngModel)]="creds.email" placeholder="Email" />
-      <input
-        class="input w-full"
-        name="displayName"
-        [(ngModel)]="creds.displayName"
-        placeholder="Display name"
-      />
-      <input
-        type="password"
-        class="input w-full"
-        name="password"
-        [(ngModel)]="creds.password"
-        placeholder="Password"
-      />
-
-      <!-- <select class="select w-full">
-        <option disabled selected>Pick a member</option>
-        @for (member of membersFromHome(); track member.id) {
-        <option value="{{ member.id }}">{{ member.displayName }}</option>
-        }
-      </select> -->
+    <ul class="steps">
+      <li class="step step-primary">Credentials</li>
+      <li class="step" [class.step-primary]="currentStep() === 2">Profile</li>
+    </ul>
+    @if (currentStep() == 1) {
+    <form [formGroup]="credentialsForm" class="flex flex-col gap-4 w-full steps">
+      <app-text-input class="mt-5" label="Email" formControlName="email" />
+      <app-text-input label="Display name" formControlName="displayName" />
+      <app-text-input label="Password" formControlName="password" type="password" />
+      <app-text-input label="Confirm Password" formControlName="confirmPassword" type="password" />
 
       <div class="flex items-center justify-end gap-3">
         <button (click)="cancel()" type="button" class="btn">Cancel</button>
-        <button class="btn btn-primary" type="submit">Register</button>
+        <button
+          [disabled]="!credentialsForm.valid"
+          class="btn btn-primary"
+          type="button"
+          (click)="nextStep()"
+        >
+          Next
+        </button>
       </div>
     </form>
+    } @if (currentStep() == 2) {
+    <form [formGroup]="profileForm" class="flex flex-col gap-4 w-full steps">
+      <div>Profile form goes here</div>
+      <div class="flex items-center justify-end gap-3">
+        <button (click)="previousStep()" type="button" class="btn">Back</button>
+        <button
+          [disabled]="!profileForm.valid"
+          class="btn btn-primary"
+          type="button"
+          (click)="register()"
+        >
+          Register
+        </button>
+      </div>
+    </form>
+    }
+  </div>
+  <div class="flex flex-col w-full mockup-code text-lg">
+    <div>Creds Value: {{ credentialsForm.value | json }}</div>
+    <div>Creds Status: {{ credentialsForm.status | json }}</div>
+    <div>Profile Value: {{ profileForm.value | json }}</div>
+    <div>Profile Status: {{ profileForm.status | json }}</div>
+  </div>
+</div> -->
+
+<div
+  class="min-h-screen bg-base-200 flex items-center justify-center p-4 bg-gradient-to-br from-base-200 to-primary/5 mt-10"
+>
+  <div class="card w-full max-w-lg bg-base-100 shadow-2xl rounded-2xl overflow-hidden">
+    <div class="bg-primary/10 p-8 pb-0 flex flex-col items-center">
+      <div
+        class="mb-4 h-12 w-12 rounded-full bg-primary text-primary-content shadow-lg grid place-items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A7.5 7.5 0 014.501 20.118z"
+          />
+        </svg>
+      </div>
+
+      <h2 class="card-title text-3xl font-bold text-base-content">Create Account</h2>
+      <p class="text-base-content/60 mt-1 text-sm mb-3">Join us in just a few steps</p>
+    </div>
+
+    <div class="card-body px-8 py-6">
+      <ul class="steps w-full mb-6">
+        <li class="step step-primary text-sm font-medium">Credentials</li>
+        <li
+          class="step text-sm font-medium transition-colors duration-300"
+          [class.step-primary]="currentStep() === 2"
+        >
+          Profile
+        </li>
+      </ul>
+
+      @if (currentStep() == 1) {
+      <form [formGroup]="credentialsForm" class="flex flex-col gap-4 animate-fade-in-right">
+        <app-text-input label="Email" formControlName="email" placeholder="you@example.com" />
+        <app-text-input label="Display Name" formControlName="displayName" />
+        <app-text-input label="Password" formControlName="password" type="password" />
+        <app-text-input
+          label="Confirm Password"
+          formControlName="confirmPassword"
+          type="password"
+        />
+
+        <div class="card-actions justify-end mt-6 flex items-center gap-3">
+          <button (click)="cancel()" type="button" class="btn btn-ghost hover:bg-base-200">
+            Cancel
+          </button>
+          <button
+            [disabled]="!credentialsForm.valid"
+            class="btn btn-primary px-8 shadow-lg shadow-primary/30"
+            type="button"
+            (click)="nextStep()"
+          >
+            Next
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+              />
+            </svg>
+          </button>
+        </div>
+      </form>
+      } @if (currentStep() == 2) {
+      <form [formGroup]="profileForm" class="flex flex-col gap-4 animate-fade-in-right">
+        <!-- <div
+          class="border-2 border-dashed border-base-300 rounded-lg p-8 text-center text-base-content/50 bg-base-50"
+        > -->
+        <div class="flex items-center gap-4">
+          <div class="font-semibold">Gender:</div>
+          <label class="flex gap-3 items-center">
+            <span>Male</span>
+            <input type="radio" formControlName="gender" value="male" class="radio radio-primary" />
+          </label>
+          <label class="flex gap-3 items-center">
+            <span>Female</span>
+            <input
+              type="radio"
+              formControlName="gender"
+              value="female"
+              class="radio radio-primary"
+            />
+          </label>
+        </div>
+        <!-- <app-text-input label="Gender" formControlName="gender" /> -->
+        <app-text-input
+          [maxDate]="getMaxDate()"
+          type="date"
+          label="Date of Birth"
+          formControlName="dateOfBirth"
+          class="mt-3"
+        />
+        <app-text-input label="City" formControlName="city" />
+        <app-text-input label="Country" formControlName="country" />
+        <!-- </div> -->
+
+        <div class="card-actions justify-end mt-6 flex items-center gap-3">
+          <button (click)="previousStep()" type="button" class="btn btn-ghost hover:bg-base-200">
+            Back
+          </button>
+          <button
+            [disabled]="!profileForm.valid"
+            class="btn btn-primary px-8 shadow-lg shadow-primary/30"
+            type="button"
+            (click)="register()"
+          >
+            Register
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </button>
+        </div>
+      </form>
+      }
+    </div>
+
+    @if (validationErrors().length > 0) {
+    <div class="mt-5 flex bg-gray-200 rounded-2xl w-1/2 p-3 mx-auto">
+      <ul class="flex flex-col text-error space-y-1">
+        @for (error of validationErrors(); track $index) {
+        <li>{{ error }}</li>
+        }
+      </ul>
+    </div>
+    }
+
+    <!-- <div class="collapse collapse-arrow bg-base-200/50 rounded-none border-t border-base-200">
+      <input type="checkbox" />
+      <div class="collapse-title text-xs font-mono text-base-content/50">Show Debug Info</div>
+      <div class="collapse-content">
+        <div class="mockup-code bg-[#1d1e22] text-xs scale-90 origin-top-left w-full">
+          <pre data-prefix="$" class="text-warning"><code>Form Status</code></pre>
+          <div>Creds Value: {{ credentialsForm.value | json }}</div>
+          <div>Creds Status: {{ credentialsForm.status | json }}</div>
+          <div>Profile Value: {{ profileForm.value | json }}</div>
+          <div>Profile Status: {{ profileForm.status | json }}</div>
+          <pre data-prefix=">" class="text-success"><code>Values JSON...</code></pre>
+        </div>
+      </div>
+    </div> -->
   </div>
 </div>

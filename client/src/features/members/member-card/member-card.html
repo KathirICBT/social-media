@@ -1,0 +1,58 @@
+<!-- @if (member(); as member) {
+<div
+  routerLink="/members/{{ member.id }}"
+  class="card cursor-pointer transition-all duration-300 ease-in-out transform hover:-translate-y-2"
+>
+  <img
+    src="{{ member?.imageUrl || '/user.png' }}"
+    alt="{{ member.displayName }} image"
+    class="rounded-lg"
+  />
+  <div
+    class="card-actions z-40 absolute bottom-0 w-full px-3 py-1 rounded-b-lg bg-gradient-to-t from-black via-black/50 to-black/0"
+  >
+    <div class="flex flex-col text-white">
+      <span class="font-semibold"> {{ member.displayName }}, {{ member.dateOfBirth | age }} </span>
+      <span class="font-semibold"> {{ member.city }} </span>
+    </div>
+  </div>
+</div>
+} -->
+
+@if (member(); as member) {
+<div routerLink="/members/{{ member.id }}" class="group relative w-full cursor-pointer">
+  <div
+    class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-gray-300 to-slate-400 opacity-20 blur-md transition duration-500 group-hover:opacity-40"
+  ></div>
+
+  <div
+    class="relative aspect-[4/5] overflow-hidden rounded-xl bg-slate-900 ring-1 ring-slate-900/5"
+  >
+    <img
+      src="{{ member?.imageUrl || '/user.png' }}"
+      alt="{{ member.displayName }}"
+      class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+    />
+
+    <div class="absolute bottom-0 left-0 right-0 p-3">
+      <div
+        class="relative overflow-hidden rounded-lg border border-white/10 bg-black/20 px-3 py-2 backdrop-blur-md transition-all duration-300 group-hover:bg-black/40 group-hover:-translate-y-1"
+      >
+        <div class="flex items-center justify-between text-white">
+          <div class="overflow-hidden pr-2">
+            <h3 class="text-sm font-bold truncate tracking-wide text-white drop-shadow-sm">
+              {{ member.displayName }}
+            </h3>
+            <p class="text-[10px] text-gray-200 flex items-center gap-1 truncate opacity-90">
+              {{ member.city }}
+            </p>
+          </div>
+          <div class="shrink-0">
+            <span class="text-lg font-bold">{{ member.dateOfBirth | age }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
