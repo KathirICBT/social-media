@@ -33,6 +33,7 @@ builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>(); // Register the TokenService with the dependency injection container as a scoped service so that it can be injected into controllers and other services as needed.
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<ILikesRepository, LikesRepository>();
 builder.Services.AddScoped<LogUserActivity>(); // Register the LogUserActivity middleware with the dependency injection container as a scoped service so that it can be injected into controllers and other services as needed.
 //builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings")); // Configure the CloudinarySettings class to bind to the "CloudinarySettings" section of the appsettings.json file. This allows the application to easily access Cloudinary configuration settings such as CloudName, ApiKey, and ApiSecret from the configuration file.
 builder.Services.Configure<CloudinarySettings>(builder.Configuration
